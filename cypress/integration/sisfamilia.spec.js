@@ -10,7 +10,7 @@ describe('ICMbio', () => {
 
     })
 
-    it.only('Cadastro no Sisfamilia', () => {
+    it('Cadastro no Sisfamilia', () => {
 
         cy.get('[data-content="Sistema de Informações das Famílias em Unidades de Conservação Federais"] > .caption > .btn').click()
         cy.get('#usersList').select('COTEC - Coordenação de Tecnologia da Informação')
@@ -34,7 +34,9 @@ describe('ICMbio', () => {
 
         //DADOS DO ENTREVISTADO
         cy.get(':nth-child(2) > .card-content > .columns > .is-4 > .control > .input').type('Lucas Rodrigues Cardoso')
-        cy.get('.dropdown-trigger > .control > .input').click()
+        cy.get('.dropdown-trigger > .control > .input').type('14-07-2021')
+
+        /*
         cy.get(':nth-child(1) > .select > select').select('fevereiro')
         cy.get('.datepicker-body > :nth-child(2) > :nth-child(4) > span').click()
         cy.get('.is-3 > .control > .select > select').select('RG')
@@ -58,9 +60,7 @@ describe('ICMbio', () => {
         cy.get(':nth-child(6) > .field > .control > .select > select').as('identidadeGenero').select('Homem')
         cy.get(':nth-child(7) > .field > .control > .select > select').as('estadoCivil').select('Solteiro')
         cy.get(':nth-child(8) > .field > .control > .select > select').as('nacionalidade').select('Brasileiro')
-        cy.get('.dropdown-trigger > .control > .input').as('calendario').click()
-        cy.get(':nth-child(1) > .select > select').as('mesCalendario').select('fevereiro')
-        cy.get(':nth-child(5) > .is-selectable > span').as('diaCalendario').click()
+        cy.get('.dropdown-trigger > .control > .input').as('calendario').type('28-02-2002')
         cy.get(':nth-child(10) > .field > .control > .select > select').as('ufNascimento').select('São Paulo')
         const naturalidadeInput = 'Osasco'
         cy.get('.autocomplete > .control > .input').type(naturalidadeInput).then(() => {
@@ -170,39 +170,13 @@ describe('ICMbio', () => {
 
 
 
-
+*/
 
 
 
     })
 
-    it('SICA-e - Cadastrar sistema', () => {
-        cy.get('[data-content="Descrição: Sistema de Integração e Controle de Acesso"] > .caption > .btn').click()
-        cy.get(':nth-child(1) > .trigger').as('sistemaTrigger').click()
-        cy.contains('Pesquisar Sistema').should('be.visible')
-        cy.get('.top-bar > .btn-group > .btn').click()
-        cy.contains('Cadastrar Sistema').should('be.visible')
-        cy.get('.top-bar > .btn-group > .btn').type('ECM')
+   
 
-    })
-
-    it('SICA-e - Cadastrar Pessoa', () => {
-        cy.get('[data-content="Descrição: Sistema de Integração e Controle de Acesso"] > .caption > .btn').click()
-        cy.get(':nth-child(9) > .trigger').as('menuPessoa').click()
-        cy.contains('Pesquisar Pessoa').should('be.visible')
-        cy.get('.btn-group > .btn').as('cadastrarPessoa').click()
-        cy.contains('Cadastrar Pessoa').should('be.visible')
-        cy.get('#sqTipoPessoa').select('Pessoa Física')
-        cy.get('.form-actions > .btn-primary').click()
-        cy.contains('Cadastrar Pessoa Física').should('be.visible')
-        const numero = 20039023
-        cy.get('#divCpf > .controls > #nuCpf').type(numero)
-        assert.isNumber(numero, 'Cpf é número')
-        cy.get('#sqEstadoCivil').select('Solteiro').should('have.value', '1')
-        cy.get('.bootbox > .modal-footer > .btn-primary').click()
-
-
-        //cy.contains('#sqTipoPessoaNascSim').should('be.checked')
-
-    });
+   
 })
