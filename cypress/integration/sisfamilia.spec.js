@@ -1,22 +1,22 @@
 /// <reference types="cypress" />
 // ./node_modules/.bin/cypress open para abrir o cypress
-describe('Sisfamilia', () => {
-        beforeEach(() => { 
-            cy.visit('https://tcti.sicae.sisicmbio.icmbio.gov.br/')
+describe('ICMbio', () => {
+    beforeEach(() => {
+        cy.visit('https://tcti.sicae.sisicmbio.icmbio.gov.br/')
 
-            cy.get('#nuLogin').type('90938542168')
-            cy.get('#senha').type('12345678')
-            cy.get('.form-actions > .btn-primary').click()
+        cy.get('#nuLogin').type('90938542168')
+        cy.get('#senha').type('12345678')
+        cy.get('.form-actions > .btn-primary').click()
 
-        })
-        
-        it('entrando no sisfamilia', () => {
+    })
+
+    it.only('Cadastro no Sisfamilia', () => {
 
         cy.get('[data-content="Sistema de Informações das Famílias em Unidades de Conservação Federais"] > .caption > .btn').click()
         cy.get('#usersList').select('COTEC - Coordenação de Tecnologia da Informação')
         cy.get('#feijoadaProfile').select('Consulta')
         cy.get('#btn-access').click()
-    
+
         //dentro do sisfamilia
         cy.get(':nth-child(1) > .navbar-item > .icon > .mdi').click()
         cy.contains('MENUS').should('be.visible')
@@ -54,6 +54,7 @@ describe('Sisfamilia', () => {
         cy.get(':nth-child(3) > .field > .control > .input').as('nomePai').type('Raimundo Costa')
         cy.get(':nth-child(4) > .field > .control > .input').as('nomeMae').type('Gau Costa')
         cy.get(':nth-child(5) > .field > .control > .input').as('apelido').type('Lucao')
+        cy.get('@nomePai')
         cy.get(':nth-child(6) > .field > .control > .select > select').as('identidadeGenero').select('Homem')
         cy.get(':nth-child(7) > .field > .control > .select > select').as('estadoCivil').select('Solteiro')
         cy.get(':nth-child(8) > .field > .control > .select > select').as('nacionalidade').select('Brasileiro')
@@ -63,7 +64,9 @@ describe('Sisfamilia', () => {
         cy.get(':nth-child(10) > .field > .control > .select > select').as('ufNascimento').select('São Paulo')
         const naturalidadeInput = 'Osasco'
         cy.get('.autocomplete > .control > .input').type(naturalidadeInput).then(() => {
-            cy.contains(naturalidadeInput).click({ force: true }) })
+            cy.contains(naturalidadeInput).click()
+        })
+        //force:true serve pra selecionar algo que não está claramente visível na tela
         cy.get(':nth-child(12) > .field > .control > .select > select').as('nivelEscolaridade').select('Ensino Superior Incompleto')
         cy.get(':nth-child(13) > .field > .control > .input').as('contatoEmergencia').type('61998158161')
         cy.get('.is-primary > span').as('proximoButton').click()
@@ -79,8 +82,9 @@ describe('Sisfamilia', () => {
         cy.get('@adicionarButton').click()
         cy.get(':nth-child(2) > .field > .control > .select > select').as('ocupacaoPrincipal').select('Pescador')
         cy.get(':nth-child(3) > .is-actions-cell > .buttons > .b-tooltip > .tooltip-trigger > .button > :nth-child(1) > .icon > .mdi')
-        .as('excluirButton').click()
-        cy.get(':nth-child(1) > :nth-child(3) > .column > .is-primary > span').click({ multiple: true})
+            .as('excluirButton').click()
+        cy.get(':nth-child(1) > :nth-child(3) > .column > .is-primary > span').click({ multiple: true })
+        //multiple:true serve pra selecionar um campo que tenha vários argumentos dentro, nesse caso pareceu um bug
 
         //DOCUMENTOS DO RESPONSÁVEL FAMILIAR
         cy.get(':nth-child(1) > .field > .control > .input').as('identidade').type('448452145')
@@ -91,8 +95,114 @@ describe('Sisfamilia', () => {
         cy.get('.is-primary > span').as('salvarButton').click()
 
         //CONFIRMAR QUESTIONÁRIO
-        cy.get(':nth-child(5) > .column > .button > span').click
-        
-         
+        cy.get(':nth-child(5) > .column > .button > span').click()
+        cy.get(':nth-child(2) > .step-link > .step-marker').as('buttonNextStep').click()
+
+        //Caracterização da área de moradia e uso
+        cy.get(':nth-child(1) > .card-content > :nth-child(1) > .field.column > .control > .select > select').as('dentroUnidade')
+            .select('Sim')
+        cy.get(':nth-child(2) > .check').as('checkIdadeReside').click()
+        cy.get(':nth-child(2) > .control > .select > select').as('UFcaracterizacao').select('Distrito Federal')
+        cy.get(':nth-child(2) > .column > .field > :nth-child(2) > .control > .select > select').as('municipio').select('Brasília')
+        cy.get(':nth-child(2) > .card-content > :nth-child(2) > .field > .control > .select > select').as('enderecoPrincipal')
+            .select('Endereço Urbano')
+        cy.get('.card-content > :nth-child(2) > :nth-child(2) > .field > .control > .select > select').as('tipoEndereco').select('Quadra')
+        cy.get(':nth-child(2) > :nth-child(3) > .column > :nth-child(1) > :nth-child(2) > .b-numberinput > .control > .input')
+            .as('numeroDaCasa').type('21')
+        cy.get(':nth-child(4) > .column > .field > .control > .input').as('Complemento').type('Do lado do prédio')
+        cy.get(':nth-child(5) > .column > .field > .control > .input').as('Bairro').type('Samambaia Norte')
+        cy.get(':nth-child(6) > .column > .field > .control > .input').as('CEP').type('72320104')
+        cy.get(':nth-child(9) > .column > .field > .control > .input').as('logradouro').type('QR 412 conj 4 casa 21')
+        cy.get(':nth-child(3) > .field > .control > .select > select').as('enderecoCorrespondencia')
+            .select('Mesmo endereço da moradia principal')
+        cy.get(':nth-child(4) > .field > .control > .select > select').select('Terra firme')
+
+        //caracterizacao da moradia principal
+        cy.get(':nth-child(1) > .column > :nth-child(1) > :nth-child(2) > .b-numberinput > .control > .input').as('qtdPessoas').type('5')
+
+
+
+        cy.get(':nth-child(2) > .column > .field > .taginput > .taginput-container > .autocomplete > .control > .input')
+            .as('selecionarCampoTipoMaterial')
+            .click()
+        cy.get(':nth-child(2) > .column > .field > .taginput > .taginput-container > .autocomplete > .dropdown-menu > .dropdown-content > :nth-child(4) > span').as('pauApiqueBarro').click()
+        cy.get(':nth-child(3) > .column > .field > .taginput > .taginput-container > .autocomplete > .control > .input').as('materialPredominanteCobertura')
+            .click({ force: true })
+        cy.get(':nth-child(3) > .column > .field > .taginput > .taginput-container > .autocomplete > .dropdown-menu > .dropdown-content > :nth-child(1) > span').as('CavacoMadeira').click()
+        cy.get('.column > .field > .control > .select > select').as('materialPredominantePiso').select('Mista', { force: true })
+
+        //Benfeitorias da Moradia Principal
+        cy.get(':nth-child(4) > .card-content > :nth-child(1) > :nth-child(2) > .column > :nth-child(1) > :nth-child(2) > .b-numberinput > .control > .input').as('qtdTV').type('2')
+        cy.get(':nth-child(1) > :nth-child(3) > .column > :nth-child(1) > :nth-child(2) > .b-numberinput > .control > .input').as('qtdPC').type('2')
+        cy.get(':nth-child(4) > .column > :nth-child(1) > :nth-child(2) > .b-numberinput > .control > .input').as('qtdAutomovel')
+            .type('0')
+        cy.get(':nth-child(5) > .column > :nth-child(1) > :nth-child(2) > .b-numberinput > .control > .input').as('qtdMotocicleta')
+            .type('0')
+        cy.get(':nth-child(7) > .column > :nth-child(1) > :nth-child(2) > .b-numberinput > .control > .input').as('qtdMaquinaLavar')
+            .type('1')
+        cy.get(':nth-child(8) > .column > :nth-child(1) > :nth-child(2) > .b-numberinput > .control > .input').as('qtdTanquinho')
+            .type('1')
+        cy.get(':nth-child(9) > .column > :nth-child(1) > :nth-child(2) > .b-numberinput > .control > .input').as('qtdFreezer').type('0')
+        cy.get(':nth-child(10) > .column > :nth-child(1) > :nth-child(2) > .b-numberinput > .control > .input').as('qtdMicroondas')
+            .type('1')
+        cy.get(':nth-child(11) > .column > :nth-child(1) > :nth-child(2) > .b-numberinput > .control > .input').as('qtdAparelhoSom')
+            .type('0')
+        cy.get(':nth-child(12) > .column > :nth-child(1) > :nth-child(2) > .b-numberinput > .control > .input').as('qtdAntenaParabolica')
+            .type('1')
+        cy.get(':nth-child(13) > .column > :nth-child(1) > :nth-child(2) > .b-numberinput > .control > .input').as('qtdGerador').type('0')
+        cy.get(':nth-child(13) > .column > :nth-child(1) > :nth-child(2) > .b-numberinput > .control > .input').as('qtdRadioAmador')
+            .type('0')
+        cy.get(':nth-child(13) > .column > :nth-child(1) > :nth-child(2) > .b-numberinput > .control > .input').as('qtdFerroEletrico').type('1')
+        cy.get(':nth-child(13) > .column > :nth-child(1) > :nth-child(2) > .b-numberinput > .control > .input').as('qtdFornoEletrico').type('1')
+        cy.get(':nth-child(17) > .column > :nth-child(1) > :nth-child(2) > .b-numberinput > .control > .input').as('tvAssinatura')
+            .type('Não')
+        cy.get(':nth-child(18) > .column > :nth-child(1) > :nth-child(2) > .b-numberinput > .control > .input').as('qtdCelular').type('4')
+        cy.get(':nth-child(4) > .card-content > :nth-child(2) > .field > .control > .select > select').as('recebeuBeneficio')
+            .select('Não')
+
+        //Caracterização da Área de Uso
+        cy.get(':nth-child(5) > .card-content > :nth-child(1) > .field > .control > .select > select').as('areaDeProducao').select('Não')
+
+        //Benfeitorias da Área de Uso
+        cy.get(':nth-child(1) > .column > .field > .taginput > .taginput-container > .autocomplete > .control > .input').as('benfeitorias').click()
+        cy.get(':nth-child(1) > .column > .field > .taginput > .taginput-container > .autocomplete > .dropdown-menu > .dropdown-content > :nth-child(1) > span').click()
+        cy.get('.button > span').click() //botao salvar
+
+
+
+
+
+
+
     })
+
+    it('SICA-e - Cadastrar sistema', () => {
+        cy.get('[data-content="Descrição: Sistema de Integração e Controle de Acesso"] > .caption > .btn').click()
+        cy.get(':nth-child(1) > .trigger').as('sistemaTrigger').click()
+        cy.contains('Pesquisar Sistema').should('be.visible')
+        cy.get('.top-bar > .btn-group > .btn').click()
+        cy.contains('Cadastrar Sistema').should('be.visible')
+        cy.get('.top-bar > .btn-group > .btn').type('ECM')
+
+    })
+
+    it('SICA-e - Cadastrar Pessoa', () => {
+        cy.get('[data-content="Descrição: Sistema de Integração e Controle de Acesso"] > .caption > .btn').click()
+        cy.get(':nth-child(9) > .trigger').as('menuPessoa').click()
+        cy.contains('Pesquisar Pessoa').should('be.visible')
+        cy.get('.btn-group > .btn').as('cadastrarPessoa').click()
+        cy.contains('Cadastrar Pessoa').should('be.visible')
+        cy.get('#sqTipoPessoa').select('Pessoa Física')
+        cy.get('.form-actions > .btn-primary').click()
+        cy.contains('Cadastrar Pessoa Física').should('be.visible')
+        const numero = 20039023
+        cy.get('#divCpf > .controls > #nuCpf').type(numero)
+        assert.isNumber(numero, 'Cpf é número')
+        cy.get('#sqEstadoCivil').select('Solteiro').should('have.value', '1')
+        cy.get('.bootbox > .modal-footer > .btn-primary').click()
+
+
+        //cy.contains('#sqTipoPessoaNascSim').should('be.checked')
+
+    });
 })
