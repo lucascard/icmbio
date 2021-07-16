@@ -34,11 +34,8 @@ describe('ICMbio', () => {
 
         //DADOS DO ENTREVISTADO
         cy.get(':nth-child(2) > .card-content > .columns > .is-4 > .control > .input').type('Lucas Rodrigues Cardoso')
-        cy.get('.dropdown-trigger > .control > .input').type('14-07-2021')
-
-        /*
-        cy.get(':nth-child(1) > .select > select').select('fevereiro')
-        cy.get('.datepicker-body > :nth-child(2) > :nth-child(4) > span').click()
+        cy.get('.dropdown-trigger > .control > .input').click()
+        cy.get('.is-today').click()
         cy.get('.is-3 > .control > .select > select').select('RG')
         cy.get('div[name="número do documento"] > .control > .input').should('be.visible').type('245479156')
         cy.get('div[name="orgão expedidor"] > .control > .input').type('ssp-df')
@@ -51,7 +48,7 @@ describe('ICMbio', () => {
         cy.get('.is-primary > span').as('buttonSalvar').click()
         //cy.contains('Questionário criado com sucesso!').should('be.visible')
 
-        //Caracterização da área de moradia e uso
+        //Membro Familiar - Dados Pessoais 
         cy.get('.field > .block > :nth-child(1) > .check').as('yesButton').click()
         cy.get(':nth-child(3) > .field > .control > .input').as('nomePai').type('Raimundo Costa')
         cy.get(':nth-child(4) > .field > .control > .input').as('nomeMae').type('Gau Costa')
@@ -59,8 +56,11 @@ describe('ICMbio', () => {
         cy.get('@nomePai')
         cy.get(':nth-child(6) > .field > .control > .select > select').as('identidadeGenero').select('Homem')
         cy.get(':nth-child(7) > .field > .control > .select > select').as('estadoCivil').select('Solteiro')
-        cy.get(':nth-child(8) > .field > .control > .select > select').as('nacionalidade').select('Brasileiro')
-        cy.get('.dropdown-trigger > .control > .input').as('calendario').type('28-02-2002')
+        cy.get(':nth-child(8) > .field > .control > .select > select').as('nacionalidade').select('1')
+        cy.get('.dropdown-trigger > .control > .input').as('calendario').click()
+        cy.get('.field-body > .field > :nth-child(2) > .select > select').select('2002')
+        cy.get(':nth-child(1) > .select > select').select('fevereiro')
+        cy.get(':nth-child(5) > :nth-child(5)').click()
         cy.get(':nth-child(10) > .field > .control > .select > select').as('ufNascimento').select('São Paulo')
         const naturalidadeInput = 'Osasco'
         cy.get('.autocomplete > .control > .input').type(naturalidadeInput).then(() => {
@@ -170,13 +170,13 @@ describe('ICMbio', () => {
 
 
 
-*/
+
 
 
 
     })
 
-   
 
-   
+
+
 })
